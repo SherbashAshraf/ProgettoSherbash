@@ -1,0 +1,80 @@
+\documentclass[a4paper,addpoints]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{amsfonts,amssymb,amsmath, amsthm}
+\usepackage{xcolor}
+\usepackage{pgf,tikz,pgfplots}
+\pgfplotsset{compat=1.15}
+\usepgfplotslibrary{fillbetween}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usepackage{tabu}
+
+\usepackage{tikz}
+\usetikzlibrary {shapes , arrows , fit , calc, positioning}
+\tikzset{box/.style={draw, rectangle, rounded corners, thick, node distance =7 em, text width =6 em, text centered, minimum height =2.5 em}}
+\tikzset{line/.style={draw, thick, -latex'}}
+
+\usepackage{tikz-uml}
+\tikzumlset{actor below=0.4cm, fill usecase=white, fill class=white, text=black, draw=black}
+
+\begin{document}
+
+\section*{Lostly --- Diagramma dei casi d'uso}
+
+Il diagramma descrive le funzionalit\`a di Lostly dal punto di vista degli attori.
+L'\emph{Utente} (registrato) pu\`o registrarsi e accedere, inserire un oggetto smarrito o ritrovato,
+cercare gli oggetti e consultarne i dettagli, segnalare una possibile corrispondenza
+(che genera la notifica all'altro utente), contattare l'altro utente per la restituzione
+e gestire le proprie segnalazioni, aggiornandone lo stato.
+L'\emph{Amministratore} eredita tutte le funzionalit\`a dell'Utente e in pi\`u gestisce
+utenti e segnalazioni.
+
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}
+    \begin{umlsystem}[x=4]{Lostly}
+        % colonna sinistra
+        \umlusecase[x=0, y=0,    width=3.6cm]{Registrazione e accesso}
+        \umlusecase[x=0, y=-2.5, width=3.6cm]{Inserimento oggetto smarrito}
+        \umlusecase[x=0, y=-5,   width=3.6cm]{Inserimento oggetto ritrovato}
+        \umlusecase[x=0, y=-7.5, width=3.6cm]{Modifica e gestione delle proprie segnalazioni}
+        \umlusecase[x=0, y=-10,  width=3.6cm]{Aggiornamento stato dell'oggetto}
+        % colonna destra
+        \umlusecase[x=6, y=0,    width=3.6cm]{Ricerca oggetti smarriti e ritrovati}
+        \umlusecase[x=6, y=-2.5, width=3.6cm]{Visualizzazione dettagli oggetto}
+        \umlusecase[x=6, y=-5,   width=3.6cm]{Segnalazione possibile corrispondenza}
+        \umlusecase[x=6, y=-7.5, width=3.6cm]{Notifica possibili corrispondenze}
+        \umlusecase[x=6, y=-10,  width=3.6cm]{Contatto tra utenti per la restituzione}
+        % amministratore
+        \umlusecase[x=3, y=-13, width=4.2cm]{Gestione utenti e segnalazioni}
+    \end{umlsystem}
+
+    \umlactor[x=0, y=-5]{Utente}
+    \umlactor[x=0, y=-13]{Amministratore}
+
+    \umlinherit{Amministratore}{Utente}
+
+    % associazioni Utente
+    \umlassoc{Utente}{usecase-1}
+    \umlassoc{Utente}{usecase-2}
+    \umlassoc{Utente}{usecase-3}
+    \umlassoc{Utente}{usecase-4}
+    \umlassoc{Utente}{usecase-6}
+    \umlassoc{Utente}{usecase-8}
+    \umlassoc{Utente}{usecase-10}
+
+    % associazione Amministratore
+    \umlassoc{Amministratore}{usecase-11}
+
+    % relazioni tra casi d'uso
+    \umlextend{usecase-5}{usecase-4}
+    \umlextend{usecase-7}{usecase-6}
+    \umlextend{usecase-8}{usecase-7}
+    \umlextend{usecase-10}{usecase-7}
+    \umlinclude{usecase-8}{usecase-9}
+\end{tikzpicture}}
+\end{center}
+
+\end{document}
