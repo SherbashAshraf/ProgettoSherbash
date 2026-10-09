@@ -1,0 +1,59 @@
+\documentclass[a4paper,addpoints]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts,amssymb,amsmath, amsthm}
+\usepackage{xcolor}
+\usepackage{pgf,tikz,pgfplots}
+\pgfplotsset{compat=1.15}
+\usepgfplotslibrary{fillbetween}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+\usepackage{tabu}
+
+\usepackage{tikz}
+\usetikzlibrary {shapes , arrows , fit , calc, positioning}
+\tikzset{box/.style={draw, rectangle, rounded corners, thick, node distance =7 em, text width =6 em, text centered, minimum height =2.5 em}}
+\tikzset{line/.style={draw, thick, -latex'}}
+
+\usepackage{tikz-uml}
+\tikzumlset{actor below=0.4cm, fill usecase=white, fill class=white, text=black, draw=black}
+
+\begin{document}
+
+In Lostly ogni \emph{utente} è identificato da nome, email e password e può pubblicare più \emph{segnalazioni}. Una segnalazione ha una descrizione, un luogo, una data, una foto e uno stato, e appartiene a una \emph{categoria}; può essere di due tipi: oggetto \emph{smarrito} oppure oggetto \emph{ritrovato}. Un oggetto smarrito può essere messo in relazione con più oggetti ritrovati (e viceversa) tramite una \emph{corrispondenza}, che ha una data di segnalazione e uno stato. Ogni corrispondenza genera delle \emph{notifiche} destinate agli utenti coinvolti, e gli utenti possono scambiarsi dei \emph{messaggi} relativi a una corrispondenza per organizzare la restituzione. L'\emph{amministratore} è un utente che può gestire utenti e segnalazioni.
+
+\vspace{1cm}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}
+
+\umlclass[x=-2]{Utente}{Nome : string \\ Email : string \\ Password : string}{registrati() : void \\ accedi() : void}
+\umlclass[x=-10]{Amministratore}{}{gestisciUtenti() : void \\ gestisciSegnalazioni() : void}
+\umlinherit{Amministratore}{Utente}
+
+\umlclass[x=6]{Segnalazione}{Descrizione : string \\ Luogo : string \\ Data : date \\ Foto : string \\ Stato : string}{modifica() : void \\ aggiornaStato(s : string) : void}
+\umlassoc[mult1=1, mult2=*, pos=0.8]{Utente}{Segnalazione}
+
+\umlclass[x=14]{Categoria}{Nome : string}{}
+\umlassoc[mult1=*, mult2=1]{Segnalazione}{Categoria}
+
+\umlsimpleclass[x=1, y=-6]{Smarrito}
+\umlsimpleclass[x=9, y=-4.5]{Ritrovato}
+\umlinherit{Smarrito}{Segnalazione}
+\umlinherit{Ritrovato}{Segnalazione}
+
+\umlHVassoc[name=assoc, mult1=*, mult2=*, pos=1.7]{Smarrito}{Ritrovato}
+\umlassocclass[x=5.3, y=-9]{Corrispondenza}{assoc-1}{DataSegnalazione : date \\ Stato : string}{}
+
+\umlclass[x=-9, y=-6]{Notifica}{Testo : string \\ Data : date \\ Letta : bool}{}
+\umlassoc[mult1=1, mult2=*]{Utente}{Notifica}
+\umlassoc[mult1=*, mult2=1]{Notifica}{Corrispondenza}
+
+\umlclass[x=-5, y=-10.5]{Messaggio}{Testo : string \\ Data : date}{}
+\umlassoc[mult1=1, mult2=*]{Utente}{Messaggio}
+\umlassoc[mult1=*, mult2=1]{Messaggio}{Corrispondenza}
+
+\end{tikzpicture}}
+\end{center}
+
+\end{document}
